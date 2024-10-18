@@ -1,4 +1,4 @@
-package ru.gb.timesheet.controller;
+package ru.gb.timesheet.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +22,12 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<List<Project>> getAllProjects() {
-        return ResponseEntity.status(HttpStatus.OK).body(projectService.getAll());
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable("id") Long id) {
-        Optional<Project> project = projectService.getById(id);
+        Optional<Project> project = projectService.findById(id);
         if(project.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(project.get());
         }

@@ -1,6 +1,5 @@
 package ru.gb.timesheet.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.gb.timesheet.model.Project;
 
@@ -15,7 +14,7 @@ public class ProjectRepository {
     private static Long sequence = 1L;
     private final List<Project> projects = new ArrayList<>();
 
-    public Optional<Project> getById(Long id) {
+    public Optional<Project> findById(Long id) {
         return projects.stream()
                 .filter(it -> Objects.equals(it.getProjectId(), id))
                 .findFirst();

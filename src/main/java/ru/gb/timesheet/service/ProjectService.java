@@ -13,11 +13,11 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public Optional<Project> getById(Long id) {
-        return projectRepository.getById(id);
+    public Optional<Project> findById(Long id) {
+        return projectRepository.findById(id);
     }
 
-    public List<Project> getAll() {
+    public List<Project> findAll() {
         return projectRepository.getAllProjects();
     }
 
