@@ -1,6 +1,5 @@
 package ru.gb.timesheet.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.gb.timesheet.model.Timesheet;
 import ru.gb.timesheet.repository.ProjectRepository;
@@ -33,7 +32,8 @@ public class TimesheetService {
     }
 
     public List<Timesheet> findAll(LocalDate createdAtBefore, LocalDate createdAtAfter) {
-        return timesheetRepository.findAll(createdAtBefore, createdAtAfter);
+//        throw new UnsupportedOperationException();
+        return timesheetRepository.findAll();
     }
 
     public Timesheet createTimesheet(Timesheet timesheet) {
@@ -46,15 +46,14 @@ public class TimesheetService {
         }
 
         timesheet.setCreatedAt(LocalDate.now());
-        return timesheetRepository.createTimesheet(timesheet);
+        return timesheetRepository.save(timesheet);
     }
 
 
     public void delete(Long id) {
-        timesheetRepository.delete(id);
+        timesheetRepository.deleteById(id);
     }
-
-    public List<Timesheet> filterByDate(LocalDate createdAtBefore, LocalDate createdAtAfter) {
-        return timesheetRepository.filterByDate(createdAtBefore, createdAtAfter);
-    }
+//    public List<Timesheet> filterByDate(LocalDate createdAtBefore, LocalDate createdAtAfter) {
+//        return timesheetRepository.filterByDate();
+//    }
 }

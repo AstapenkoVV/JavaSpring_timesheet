@@ -1,67 +1,39 @@
 package ru.gb.timesheet.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.gb.timesheet.model.Timesheet;
 
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Predicate;
 
-@Repository  // @Component для классов работающих с данными
-public class TimesheetRepository {
+@Repository
+public interface TimesheetRepository extends JpaRepository<Timesheet, Long> {
 
-    private static Long sequence = 1L;
-    private final List<Timesheet> timesheets = new ArrayList<>();
+    // select * from timesheet where projectId = $1
+    // List<Timesheet> findByProjectId(Long projectId);
 
-    public Optional<Timesheet> findById(Long id) {
-        // select * from timesheets where id = $id
-        return timesheets.stream()
-                .filter(it -> Objects.equals(it.getId(), id))
-                .findFirst();
-    }
+    // select * from timesheet where projectId = $1
+    // order by created_at desc
+    // jql - java query language
+//    @Query("select t from Timesheet t where t.projectId = :projectId order by t.createdAt desc")
+    List<Timesheet> findByProjectId(Long projectId);
 
-    public List<Timesheet> findAll(LocalDate createdAtBefore, LocalDate createdAtAfter) {
-        Predicate<Timesheet> filter = it -> true;
-        if (Objects.nonNull(createdAtBefore)) {
-            filter = filter.and(it -> it.getCreatedAt().isBefore(createdAtBefore));
-        }
+    // select * from timesheet where created_at > $1 and created_at < $2
+    List<Timesheet> findByCreatedAtBetween(LocalDate min, LocalDate max);
 
-        if (Objects.nonNull(createdAtAfter)) {
-            filter = filter.and(it -> it.getCreatedAt().isAfter(createdAtAfter));
-        }
+    // select * from timesheet where projectId = $1
+    // Note: сломается, если в БД результат выдает больше одного значения
+    // Optional<Timesheet> findByProjectId(Long projectId;
 
-        return timesheets.stream()
-                .filter(filter)
-                .toList();
-    }
+//    default List<Timesheet> findByCreatedAtBetweenUnsafe(LocalDate min, LocalDate max) {
+//        if (min == null && max == null) {
+//            return findAll();
+//        } else if (min == null) {
+//            return findByCreatedAtLessThen(max);
+//        }
+//        //........
+//    }
 
-    public Timesheet createTimesheet(Timesheet timesheet) {
-        timesheet.setId(sequence++);
-        timesheets.add(timesheet);
-        return timesheet;
-    }
-
-    public void delete(Long id) {
-        timesheets.stream()
-                .filter(it -> Objects.equals(it.getId(), id))
-                .findFirst()
-                .ifPresent(timesheets::remove); // если нет - иногда посылают 404 Not Found
-    }
-
-    public List<Timesheet> filterByDate(LocalDate createdAtBefore, LocalDate createdAtAfter) {
-        Predicate<Timesheet> filter = it -> true;
-        if (Objects.nonNull(createdAtBefore)) {
-            filter = filter.and(it -> it.getCreatedAt().isBefore(ChronoLocalDate.from(createdAtBefore)));
-        }
-        if (Objects.nonNull(createdAtAfter)) {
-            filter = filter.and(it -> it.getCreatedAt().isAfter(ChronoLocalDate.from(createdAtAfter)));
-        }
-        return timesheets.stream()
-                .filter(filter)
-                .toList();
-    }
 }

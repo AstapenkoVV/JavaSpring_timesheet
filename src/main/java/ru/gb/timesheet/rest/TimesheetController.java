@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.timesheet.model.Employee;
 import ru.gb.timesheet.model.Timesheet;
 import ru.gb.timesheet.service.TimesheetService;
 
@@ -16,10 +17,12 @@ public class TimesheetController {
 
     private final TimesheetService service;
     private final ProjectController projectController;
+    private final EmployeeController employeeController;
 
-    public TimesheetController(TimesheetService service, ProjectController projectController) {
+    public TimesheetController(TimesheetService service, ProjectController projectController, EmployeeController employeeController) {
         this.service = service;
         this.projectController = projectController;
+        this.employeeController = employeeController;
     }
 
     @GetMapping("/{id}") // получить все
@@ -37,11 +40,11 @@ public class TimesheetController {
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll(createdAtBefore, createdAtAfter));
     }
 
-    @GetMapping("/filter")
-    public ResponseEntity<List<Timesheet>> filterByDate(@RequestParam(required = false) LocalDate createdAtBefore,
-                                                        @RequestParam(required = false) LocalDate createdAtAfter) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.filterByDate(createdAtBefore, createdAtAfter));
-    }
+//    @GetMapping("/filter")
+//    public ResponseEntity<List<Timesheet>> filterByDate(@RequestParam(required = false) LocalDate createdAtBefore,
+//                                                        @RequestParam(required = false) LocalDate createdAtAfter) {
+//        return ResponseEntity.status(HttpStatus.FOUND).body(service.filterByDate(createdAtBefore, createdAtAfter));
+//    }
 
     @PostMapping // создание нового ресурса
     public ResponseEntity<Timesheet> createTimesheet(@RequestBody Timesheet timesheet, @PathVariable("projectId") Long projectId) {

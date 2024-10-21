@@ -6,12 +6,12 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "project")
-public class Project {
+@Table(name = "employee")
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    private Long projectId;
-    private String projectName;
+    @EqualsAndHashCode.Exclude
+    private Long id;
+    private String firstName;
 }
