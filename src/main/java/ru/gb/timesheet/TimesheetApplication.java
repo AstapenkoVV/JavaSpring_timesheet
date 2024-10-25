@@ -23,7 +23,7 @@ public class TimesheetApplication {
 		ProjectRepository projectRepo = ctx.getBean(ProjectRepository.class);
 		EmployeeRepository employeeRepo = ctx.getBean(EmployeeRepository.class);
 
-		for (int i = 3; i <= 5; i++) {
+		for (int i = 1; i <= 5; i++) {
 			Employee employee = new Employee();
 			employee.setFirstName("EmployeeName #" + i);
 			employeeRepo.save(employee);
@@ -41,7 +41,7 @@ public class TimesheetApplication {
 
 			Timesheet timesheet = new Timesheet();
 			timesheet.setProjectId(ThreadLocalRandom.current().nextLong(1, 6));
-			timesheet.setEmployeeId(ThreadLocalRandom.current().nextLong(1, 5));
+			timesheet.setEmployeeId(ThreadLocalRandom.current().nextLong(1, 6));
 			timesheet.setCreatedAt(createdAt);
 			timesheet.setMinutes(ThreadLocalRandom.current().nextInt(100, 1000));
 
